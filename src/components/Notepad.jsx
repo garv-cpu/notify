@@ -292,7 +292,11 @@ const Notepad = () => {
       </div>
 
       <div className="my-4 p-4 text-center bg-paperInputLight dark:bg-paperInputDark border border-paperBorderLight dark:border-paperBorderDark rounded text-accentLight dark:text-accentDark select-none">
-        [Ad Slot - 728x90]
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8635595026570927"
+          crossorigin="anonymous"
+        ></script>
       </div>
 
       {showDeleteModal && (
