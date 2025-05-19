@@ -291,13 +291,9 @@ const Notepad = () => {
         </button>
       </div>
 
-      <div className="my-4 p-4 text-center bg-paperInputLight dark:bg-paperInputDark border border-paperBorderLight dark:border-paperBorderDark rounded text-accentLight dark:text-accentDark select-none">
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8635595026570927"
-          crossorigin="anonymous"
-        ></script>
-      </div>
+      {/* <div className="my-4 p-4 text-center bg-paperInputLight dark:bg-paperInputDark border border-paperBorderLight dark:border-paperBorderDark rounded text-accentLight dark:text-accentDark select-none">
+        // SHOW ADS HERE MAYBE
+      </div> */}
 
       {showDeleteModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 z-50">
