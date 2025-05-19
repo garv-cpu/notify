@@ -38,7 +38,6 @@ const Notepad = () => {
   useEffect(() => {
     document.documentElement.classList.add("dark");
   }, []);
-  
 
   // Animate page flip when changing notes
   useEffect(() => {
@@ -56,12 +55,6 @@ const Notepad = () => {
   // Save note content & auto rename if no manual title
   useEffect(() => {
     localStorage.setItem(selectedKey, note);
-    if (!manualTitles[selectedKey]) {
-      const newTitle = generateTitle(note);
-      if (newTitle && newTitle !== selectedKey) {
-        renameNoteAuto(selectedKey, newTitle);
-      }
-    }
   }, [note]);
 
   useEffect(() => {
@@ -84,14 +77,17 @@ const Notepad = () => {
     do {
       newNoteName = `${AUTO_TITLE_PREFIX} ${i++}`;
     } while (noteKeys.includes(newNoteName));
+
+    const firstLine = generateTitle("");
+    localStorage.setItem(newNoteName, "");
+
+    setManualTitles((prev) => ({
+      ...prev,
+      [newNoteName]: false, // mark as not manually titled
+    }));
+
     setNoteKeys((prev) => [...prev, newNoteName]);
     setSelectedKey(newNoteName);
-    localStorage.setItem(newNoteName, "");
-    setManualTitles((prev) => {
-      const updated = { ...prev };
-      delete updated[newNoteName];
-      return updated;
-    });
   };
 
   const renameNote = () => {
@@ -189,7 +185,7 @@ const Notepad = () => {
     >
       <header className="text-center py-4 border-b border-b-paperBorderLight dark:border-b-paperBorderDark mb-6 select-none">
         <h1 className="text-3xl font-bold text-terraLight dark:text-terraDark tracking-wide">
-        🏡 Notify
+          🏡 Notify
         </h1>
         <p className="text-sm text-accentLight dark:text-accentDark">
           Warm notes for warmer thoughts
