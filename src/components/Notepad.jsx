@@ -12,6 +12,7 @@ import {
   FiSun,
 } from "react-icons/fi";
 import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
 
 const AUTO_TITLE_PREFIX = "Note";
 
@@ -115,26 +116,6 @@ const Notepad = () => {
     setRenameValue("");
   };
 
-  const renameNoteAuto = (oldName, newName) => {
-    if (noteKeys.includes(newName) && newName !== oldName) return;
-
-    const updatedKeys = noteKeys.map((key) =>
-      key === oldName ? newName : key
-    );
-    const content = localStorage.getItem(oldName);
-    localStorage.removeItem(oldName);
-    localStorage.setItem(newName, content);
-
-    setNoteKeys(updatedKeys);
-    setManualTitles((prev) => {
-      const copy = { ...prev };
-      delete copy[oldName];
-      return copy;
-    });
-
-    setSelectedKey(newName);
-  };
-
   const deleteNoteConfirmed = () => {
     if (noteKeys.length === 1)
       return toast.error("You can't delete the only note.");
@@ -184,8 +165,14 @@ const Notepad = () => {
       transition-colors duration-500"
     >
       <header className="text-center py-4 border-b border-b-paperBorderLight dark:border-b-paperBorderDark mb-6 select-none">
-        <h1 className="text-3xl font-bold text-terraLight dark:text-terraDark tracking-wide">
-          🏡 Notify
+        <h1 className="text-3xl font-bold text-terraLight dark:text-terraDark tracking-wide flex items-center justify-center gap-2">
+          <img
+            src="/ChatGPT Image May 19, 2025, 09_41_17 PM.png"
+            alt="Home Icon"
+            className="w-8 h-8"
+            // Adjust width/height or styling as you want
+          />
+          Notify
         </h1>
         <p className="text-sm text-accentLight dark:text-accentDark">
           Warm notes for warmer thoughts
@@ -289,6 +276,14 @@ const Notepad = () => {
         >
           <FiDownload /> Export to PDF
         </button>
+        <div className="text-center text-[26px] text-accentLight dark:text-accentDark select-none">
+          <Link
+            to="/privacy"
+            className="hover:underline hover:text-terraLight dark:hover:text-terraDark transition-colors duration-300"
+          >
+            Privacy Policy
+          </Link>
+        </div>
       </div>
 
       {/* <div className="my-4 p-4 text-center bg-paperInputLight dark:bg-paperInputDark border border-paperBorderLight dark:border-paperBorderDark rounded text-accentLight dark:text-accentDark select-none">
