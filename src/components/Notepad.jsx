@@ -33,6 +33,8 @@ const Notepad = () => {
   const renameInputRef = useRef(null);
   const textareaRef = useRef(null);
   const [isFlipping, setIsFlipping] = useState(false);
+  const [qrDataUrl, setQrDataUrl] = useState(null);
+  const [showQrModal, setShowQrModal] = useState(false);
 
   // Save dark mode preference to localStorage and toggle html class
   useEffect(() => {
@@ -70,6 +72,19 @@ const Notepad = () => {
     const firstLine = text.trim().split("\n")[0];
     return firstLine.length > 30 ? firstLine.slice(0, 27) + "..." : firstLine;
   }
+
+  const handleGenerateQR = async () => {
+    try {
+      const QRCode = await import("qrcode");
+      const data = `${selectedKey} - ${note}`;
+      const url = await QRCode.toDataURL(data);
+      setQrDataUrl(url);
+      setShowQrModal(true);
+    } catch (err) {
+      toast.error("Failed to generate QR code.");
+      console.error(err);
+    }
+  };
 
   const addNewNote = () => {
     let i = 1;
@@ -290,6 +305,14 @@ const Notepad = () => {
         >
           <FiPrinter /> Print Note
         </button>
+
+        <button
+          onClick={handleGenerateQR}
+          className="button-action bg-terraLight hover:bg-terraHoverLight dark:bg-terraDark dark:hover:bg-terraHoverDark"
+        >
+          Share via QR
+        </button>
+
         <div id="print-area" className="hidden">
           <h1>{selectedKey}</h1>
           <pre style={{ whiteSpace: "pre-wrap", fontFamily: "serif" }}>
@@ -334,6 +357,20 @@ const Notepad = () => {
                 Cancel
               </button>
             </div>
+          </div>
+        </div>
+      )}
+      {showQrModal && qrDataUrl && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
+          <div className="bg-white dark:bg-paperInputDark text-black dark:text-paperTextDark p-6 rounded-lg shadow-lg text-center">
+            <h2 className="text-lg font-semibold mb-4">Scan to Share</h2>
+            <img src={qrDataUrl} alt="QR Code" className="mx-auto mb-4 " />
+            <button
+              onClick={() => setShowQrModal(false)}
+              className="button-action bg-terraLight hover:bg-terraHoverLight dark:bg-terraDark dark:hover:bg-terraHoverDark"
+            >
+              Close
+            </button>
           </div>
         </div>
       )}
