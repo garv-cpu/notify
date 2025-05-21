@@ -8,8 +8,7 @@ import {
   FiX,
   FiDownload,
   FiFileText,
-  FiMoon,
-  FiSun,
+  FiPrinter,
 } from "react-icons/fi";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
@@ -141,6 +140,15 @@ const Notepad = () => {
     a.href = url;
     a.download = `${selectedKey}.txt`;
     a.click();
+  };
+  const handlePrint = () => {
+    const printContents = document.getElementById("print-area").innerHTML;
+    const originalContents = document.body.innerHTML;
+
+    document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
+    window.location.reload(); // Refresh to restore React state
   };
 
   const downloadAsPDF = () => {
@@ -276,7 +284,20 @@ const Notepad = () => {
         >
           <FiDownload /> Export to PDF
         </button>
-        <div className="text-center text-[26px] text-accentLight dark:text-accentDark select-none">
+        <button
+          onClick={handlePrint}
+          className="button-action bg-terraLight hover:bg-terraHoverLight dark:bg-terraDark dark:hover:bg-terraHoverDark"
+        >
+          <FiPrinter /> Print Note
+        </button>
+        <div id="print-area" className="hidden">
+          <h1>{selectedKey}</h1>
+          <pre style={{ whiteSpace: "pre-wrap", fontFamily: "serif" }}>
+            {note}
+          </pre>
+        </div>
+
+        <div className="text-center text-[27px] text-accentLight dark:text-accentDark select-none">
           <Link
             to="/privacy"
             className="hover:underline hover:text-terraLight dark:hover:text-terraDark transition-colors duration-300"
@@ -422,6 +443,26 @@ const Notepad = () => {
         .animate-fadeIn {
           animation: fadeIn 0.3s ease-in-out forwards;
         }
+          @media print {
+          body * {
+          visibility: hidden;
+        }
+
+        #print-area,
+        #print-area * {
+          visibility: visible;
+        }
+
+        #print-area {
+          position: absolute;
+         top: 0;
+         left: 0;
+         background: white;
+         color: black;
+          width: 100%;
+         padding: 20px;
+       }
+      }
       `}</style>
     </div>
   );
