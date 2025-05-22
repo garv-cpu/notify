@@ -340,17 +340,17 @@ const Notepad = () => {
         </button>
 
         <button
+          onClick={handleShareViaWhatsApp}
+          className="button-action bg-terraLight hover:bg-terraHoverLight dark:bg-terraDark dark:hover:bg-terraHoverDark"
+        >
+          Share
+        </button>
+        
+        <button
           onClick={handleGenerateQR}
           className="button-action bg-terraLight hover:bg-terraHoverLight dark:bg-terraDark dark:hover:bg-terraHoverDark"
         >
           Share via QR
-        </button>
-
-        <button
-          onClick={handleShareViaWhatsApp}
-          className="button-action bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600"
-        >
-          Share on WhatsApp
         </button>
 
         <div id="print-area" className="hidden">
