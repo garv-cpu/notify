@@ -86,6 +86,31 @@ const Notepad = () => {
     }
   };
 
+  const handleShareViaWhatsApp = async () => {
+    try {
+      const QRCode = await import("qrcode");
+      const data = `${selectedKey} - ${note}`;
+      const url = await QRCode.toDataURL(data);
+      setQrDataUrl(url); // optional, in case you want to show it as well
+
+      // Upload to anonymous image hosting or use data URL directly
+      const whatsappMessage = encodeURIComponent(
+        `Here's a QR code for my note "${selectedKey}":\n\n(Note preview: ${note.slice(
+          0,
+          100
+        )}...)`
+      );
+
+      // Use data URL directly via WhatsApp (some clients support it), or recommend downloading it
+      const shareUrl = `https://api.whatsapp.com/send?text=${whatsappMessage}`;
+
+      window.open(shareUrl, "_blank");
+    } catch (err) {
+      toast.error("Failed to share via WhatsApp.");
+      console.error(err);
+    }
+  };
+
   const addNewNote = () => {
     let i = 1;
     let newNoteName;
@@ -311,6 +336,13 @@ const Notepad = () => {
           className="button-action bg-terraLight hover:bg-terraHoverLight dark:bg-terraDark dark:hover:bg-terraHoverDark"
         >
           Share via QR
+        </button>
+
+        <button
+          onClick={handleShareViaWhatsApp}
+          className="button-action bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600"
+        >
+          Share on WhatsApp
         </button>
 
         <div id="print-area" className="hidden">
