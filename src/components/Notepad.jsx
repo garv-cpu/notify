@@ -90,23 +90,31 @@ const Notepad = () => {
     try {
       const QRCode = await import("qrcode");
       const data = `${selectedKey} - ${note}`;
-      const url = await QRCode.toDataURL(data);
-      setQrDataUrl(url); // optional, in case you want to show it as well
+      const dataUrl = await QRCode.toDataURL(data);
+      setQrDataUrl(dataUrl);
 
-      // Upload to anonymous image hosting or use data URL directly
-      const whatsappMessage = encodeURIComponent(
-        `Here's a QR code for my note "${selectedKey}":\n\n(Note preview: ${note.slice(
-          0,
-          100
-        )}...)`
-      );
+      const res = await fetch(dataUrl);
+      const blob = await res.blob();
+      const file = new File([blob], "note-qr.png", { type: "image/png" });
 
-      // Use data URL directly via WhatsApp (some clients support it), or recommend downloading it
-      const shareUrl = `https://api.whatsapp.com/send?text=${whatsappMessage}`;
+      const text = `Here's a QR code for my note "${selectedKey}":\n\n(Note preview: ${note.slice(
+        0,
+        100
+      )}...)`;
 
-      window.open(shareUrl, "_blank");
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          title: "My Note QR Code",
+          text,
+          files: [file],
+        });
+      } else {
+        // Fallback: open WhatsApp with just the text
+        const whatsappLink = `https://wa.me/?text=${encodeURIComponent(text)}`;
+        window.open(whatsappLink, "_blank");
+      }
     } catch (err) {
-      toast.error("Failed to share via WhatsApp.");
+      toast.error("Failed to share QR code.");
       console.error(err);
     }
   };
